@@ -7,6 +7,7 @@ import (
 	"context"
 	"github.com/hashicorp-demoapp/hashicups-client-go"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
+	"github.com/hashicorp/terraform-plugin-framework/function"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/provider"
 	"github.com/hashicorp/terraform-plugin-framework/provider/schema"
@@ -17,7 +18,10 @@ import (
 )
 
 // Ensure hashicupsProvider satisfies various provider interfaces.
-var _ provider.Provider = &hashicupsProvider{}
+var (
+	_ provider.Provider              = &hashicupsProvider{}
+	_ provider.ProviderWithFunctions = &hashicupsProvider{}
+)
 
 // hashicupsProvider defines the provider implementation.
 type hashicupsProvider struct {
@@ -202,5 +206,11 @@ func New(version string) func() provider.Provider {
 		return &hashicupsProvider{
 			version: version,
 		}
+	}
+}
+
+func (p *hashicupsProvider) Functions(_ context.Context) []func() function.Function {
+	return []func() function.Function{
+		NewComputeTaxFunction,
 	}
 }
