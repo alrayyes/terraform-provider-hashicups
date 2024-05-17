@@ -6,10 +6,8 @@ package main
 import (
 	"context"
 	"flag"
-	"log"
-
 	"github.com/hashicorp/terraform-plugin-framework/providerserver"
-
+	"log"
 	"terraform-provider-hashicups/internal/provider"
 )
 
